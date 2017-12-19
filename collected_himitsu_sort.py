@@ -1,6 +1,6 @@
 import os, csv
 import random
-import himitsu_data_gd
+import himitsu_data_gd_3
 import pandas as pd
 import numpy as np
 
