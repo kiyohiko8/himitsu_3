@@ -9,31 +9,28 @@ import random
 import himitsu_data_gd_3
 import pandas as pd
 import numpy as np
+import collected_himitsu_sort
 
 
 #訓練データの作成	
-def mk_x_train(all_word_list, word_vec, collected):
+def mk_x_train(all_word_list, word_vec, collected, sorted):
 	
 	#ユーザ毎のデータをまとめた全データ
 	x_train = []
 	
 	
 	for items in collected:
-		y = 0
-		for ite in items:
-			y += 1
-		if y < 3:
-			continue
-		else:
-			for j in range(1):
-				x_data = np.zeros(271, int)
-				pre_x = random.sample(items, 3)
-				for i, word in enumerate(all_word_list):
-					for item in pre_x:
-						if item == word:
-							x_data[i] = 1
 
-				x_train.append(x_data)
+		for j in range(1):
+			x_data = np.zeros(271, int)
+			for x in sorted[:][0]:
+				if x in items:
+					for i, word in enumerate(all_word_list):
+						if x == word:
+							x_data[i] = 1
+						break
+
+			x_train.append(x_data)
 					
 					
 	return x_train
@@ -100,9 +97,9 @@ if __name__ == "__main__":
 	
 	himitsu  = himitsu_data_gd_3.mk_allword_list()
 	word_vec = himitsu_data_gd_3.mk_vec(himitsu)
-
+	sorted = collected_himitsu_sort()
 	
-	x_train  = mk_x_train(himitsu, word_vec, collected)
+	x_train  = mk_x_train(himitsu, word_vec, collected, sorted)
 	y_train  = mk_y_train(himitsu, collected)
 	
 	print("[")
