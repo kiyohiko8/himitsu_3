@@ -13,24 +13,34 @@ import collected_himitsu_sort
 
 
 #訓練データの作成	
-def mk_x_train(all_word_list, word_vec, collected, sorted):
+def mk_x_train(all_word_list, collected, sorted):
 	
 	#ユーザ毎のデータをまとめた全データ
 	x_train = []
 	
-	
+	#items:集められたデータのうちの１ユーザ分
 	for items in collected:
-
-		for j in range(1):
-			x_data = np.zeros(271, int)
-			for x in sorted[:][0]:
-				if x in items:
+		x_data = np.zeros(271, int)
+		cnt = 0
+		for x in sorted:
+			if cnt == 0:
+				if x[1] in items:
 					for i, word in enumerate(all_word_list):
-						if x == word:
+						if word == x[1]:
 							x_data[i] = 1
-						break
+							cnt += 1
+						
+						else:
+							continue
+				else:
+					continue
+			else:
+				break
+						
+	
 
-			x_train.append(x_data)
+
+		x_train.append(x_data)
 					
 					
 	return x_train
@@ -42,24 +52,16 @@ def mk_x_train(all_word_list, word_vec, collected, sorted):
 def mk_y_train(all_word_list, collected):
 	y_train = []
 	for know_list in collected:
-		x = 0
-		for know in know_list:
-			x += 1
+		y_data = []
+		#itemがknow_listにあれば1を追加する
+		for item in all_word_list:
+			if item in know_list:
+				y_data.append(int(1))
+			else:
+				y_data.append(int(0))
 			
-		if x < 3:
-			continue
-			
-		else:
-			y_data = []
-			#itemがknow_listにあれば1を追加する
-			for item in all_word_list:
-				if item in know_list:
-					y_data.append(int(1))
-				else:
-					y_data.append(int(0))
-			
-			for i in range(1):
-				y_train.append(y_data)
+		for i in range(1):
+			y_train.append(y_data)
 			
 	y_train = np.array(y_train)
 				
@@ -97,9 +99,9 @@ if __name__ == "__main__":
 	
 	himitsu  = himitsu_data_gd_3.mk_allword_list()
 	word_vec = himitsu_data_gd_3.mk_vec(himitsu)
-	sorted = collected_himitsu_sort()
+	sorted   = collected_himitsu_sort.count_sort(collected, himitsu)
 	
-	x_train  = mk_x_train(himitsu, word_vec, collected, sorted)
+	x_train  = mk_x_train(himitsu, collected, sorted)
 	y_train  = mk_y_train(himitsu, collected)
 	
 	print("[")
@@ -118,5 +120,7 @@ if __name__ == "__main__":
 	print("len of x_train:", len(x_train))
 	print("len of y_train:", len(y_train))
 	print("len of correct lavel:",len(y_train[0]))
+	
+	
 	
 	
