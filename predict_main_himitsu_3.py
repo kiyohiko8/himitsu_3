@@ -30,7 +30,7 @@ def mk_user_know(sorted):
 	wiselist = []
 	for item in sorted:
 		cnt = 0
-		print(item)
+		print(item[1])
 		data = input("これを知っていれば1, 知らなければ0を入力してください:")
 		#例外処理
 		while 0 < 1:
@@ -42,9 +42,9 @@ def mk_user_know(sorted):
 				data = input("入力しなおしてください:")
 		#入力データリストに追加
 		if data == str(1):
-			wiselist.append(item)
+			wiselist.append(item[1])
 			cnt += 1
-	#知っている知識が3個以上になったらループを抜け出す
+	#知っている知識が1個以上になったらループを抜け出す
 		if cnt != 0:
 			break
 
@@ -61,8 +61,9 @@ def mk_input_data(wiselist, all_word_list):
 		for item in wiselist:
 			if item == word:
 				u_data[i] = 1
-
 		input_data.append(u_data)
+
+		
 					
 					
 	return input_data
@@ -93,12 +94,14 @@ if __name__ == "__main__":
 	himitsu  = himitsu_data_gd_3.mk_allword_list()
 	#ひみつ道具ベクトルの作成
 	word_vec = himitsu_data_gd_3.mk_vec(himitsu)
+	#収集データの読み込み
 	collected = collected_himitsu_data_3.read_csv("himitsu_data.csv")
+	#出現順にsortしたデータの読み込み
 	sorted   = collected_himitsu_sort.count_sort(collected, himitsu)
 	
 	#学習結果の読み込み
-	model = model_from_json(open('predict_model_himitsu_1.json').read())
-	model.load_weights('predict_weights_himitsu_1.h5')
+	model = model_from_json(open('predict_model_himitsu_2.json').read())
+	model.load_weights('predict_weights_himitsu_2.h5')
 	
 	#概要の出力
 	model.summary();
@@ -109,10 +112,10 @@ if __name__ == "__main__":
 	
 		#ユーザ入力部
 		wise_list = mk_user_know(sorted)
+		print(wise_list)
 		#推定器への入力用データの作成
 		input_data = mk_input_data(wise_list, himitsu)
-		#入力値を昇順にソート
-		input_data[0].sort()
+
 		input_data = np.array(input_data)
 		print(input_data)
 	
