@@ -61,7 +61,8 @@ def mk_input_data(wiselist, all_word_list):
 		for item in wiselist:
 			if item == word:
 				u_data[i] = 1
-		input_data.append(u_data)
+				input_data.append(u_data)
+				break
 
 		
 					
