@@ -3,6 +3,7 @@ import random
 import himitsu_data_gd_3
 import pandas as pd
 import numpy as np
+import re
 
 
 
@@ -21,7 +22,10 @@ def read_csv(csv_data):
 			row = row.replace('かならず実現するメモ帳', 'かならず実現する予定メモ帳')
 			row = row.replace('穴掘り機', '穴ほり機')
 			row = row.replace('重量ペンキ', '重力ペンキ')
-			line = row.split(",")
+			for i in range(101):
+				row = row.replace(str(i), '')
+			#line = row.split(",")
+			line = [i for i in re.split(r',', row) if i != ""]
 			collected.append(line)
 			
 			
@@ -48,11 +52,12 @@ if __name__ == "__main__":
 
 
 	
-	himitsu  = himitsu_data_gd.mk_allword_list()
+	himitsu  = himitsu_data_gd_3.mk_allword_list()
 	collected =read_csv("himitsu_data.csv")
+	print(collected)
 	cntlist = count_sort(collected, himitsu)
-	for item in cntlist:
-		print(item)
+	#for item in cntlist:
+		#print(item)
 		
 		
 
